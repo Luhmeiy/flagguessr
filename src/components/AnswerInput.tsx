@@ -211,6 +211,7 @@ const AnswerInput = ({
 					placeholder="Type your answer..."
 					aria-label="Input answer"
 					disabled={isSubmitted}
+					required
 				/>
 
 				{selected && (

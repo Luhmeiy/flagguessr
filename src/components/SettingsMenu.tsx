@@ -3,12 +3,16 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { X } from "@phosphor-icons/react/dist/ssr";
-import { Settings } from "@/interfaces/Settings";
 import ButtonContainer from "./ButtonContainer";
+import FlagSelector from "./FlagSelector";
+import { Flag } from "@/interfaces/Flag";
+import { GroupedFlags } from "@/interfaces/GroupedFlags";
+import { Settings } from "@/interfaces/Settings";
 
 const defaultSettings: Settings = {
 	mode: "casual",
 	style: "multiple",
+	selectedFlags: [],
 };
 
 const gameModes = ["casual", "survival", "timed"];
@@ -17,11 +21,15 @@ const styles = ["multiple", "written"];
 const SettingsMenu = () => {
 	const router = useRouter();
 
+	const [flags, setFlags] = useState<GroupedFlags[] | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const [isVisible, setIsVisible] = useState(false);
 	const [settings, setSettings] = useState<Settings>(defaultSettings);
 	const [savedSettings, setSavedSettings] = useState<Settings | null>(null);
 
-	const handleSettings = (option: string, value: string) => {
+	const handleSettings = (option: string, value: string | Flag[]) => {
 		setSettings((prev) => ({
 			...prev,
 			[option]: value,
@@ -40,6 +48,35 @@ const SettingsMenu = () => {
 
 		if (savedSettings) setSavedSettings(savedSettings);
 	}, []);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			setIsLoading(true);
+			setError(null);
+
+			try {
+				const response = await fetch("/api/flags");
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+
+				const data = await response.json();
+
+				setFlags(data);
+			} catch (error) {
+				setError(
+					error instanceof Error
+						? error.message
+						: "Failed to load flag"
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		if (isVisible) fetchData();
+	}, [isVisible]);
 
 	return (
 		<>
@@ -66,7 +103,7 @@ const SettingsMenu = () => {
 			</div>
 
 			{isVisible && (
-				<div className="absolute w-full max-w-96 flex flex-col gap-4 bg-slate-200 px-4 py-3 rounded dark:bg-neutral-800">
+				<div className="absolute w-full max-w-96 max-h-[35rem] flex flex-col gap-4 bg-slate-200 px-4 py-3 rounded overflow-auto dark:bg-neutral-800">
 					<div className="flex justify-between items-center">
 						<h2 className="text-xl font-bold">Settings</h2>
 
@@ -91,6 +128,14 @@ const SettingsMenu = () => {
 						settings={settings}
 						handleSettings={handleSettings}
 					/>
+
+					{error && <div className="text-red-500">{error}</div>}
+					{!isLoading && flags && (
+						<FlagSelector
+							flags={flags}
+							handleSettings={handleSettings}
+						/>
+					)}
 
 					<button
 						onClick={() => handleStart(settings)}

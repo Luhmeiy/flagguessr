@@ -1,58 +1,26 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import AnswerInput from "@/components/AnswerInput";
 import FlagDisplay from "@/components/FlagDisplay";
 import GameOver from "@/components/GameOver";
 import PointsDisplay from "@/components/PointsDisplay";
 import { Flag } from "@/interfaces/Flag";
+import { Settings } from "@/interfaces/Settings";
 
 export default function Guess() {
+	const router = useRouter();
+
 	const [answer, setAnswer] = useState("");
 	const [position, setPosition] = useState(1);
 	const [score, setScore] = useState(0);
 
 	const [flags, setFlags] = useState<Flag[] | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-
 	const [gameOver, setGameOver] = useState(false);
 
 	const handleScore = useCallback(() => {
 		setScore((prev) => prev + 1);
-	}, []);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			setIsLoading(true);
-			setError(null);
-
-			try {
-				const response = await fetch("/api/flags");
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-
-				const data = await response.json();
-
-				if (!Array.isArray(data) || data.length === 0) {
-					throw new Error("No flags available");
-				}
-
-				setFlags(data);
-			} catch (error) {
-				setError(
-					error instanceof Error
-						? error.message
-						: "Failed to load flag"
-				);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		fetchData();
 	}, []);
 
 	useEffect(() => {
@@ -64,8 +32,14 @@ export default function Guess() {
 		}
 	}, [gameOver]);
 
-	if (error) return <div className="text-red-500">{error}</div>;
-	if (isLoading) return null;
+	useEffect(() => {
+		const { selectedFlags } = JSON.parse(
+			localStorage.getItem("flagGuessrSettings")!
+		) as Settings;
+
+		if (selectedFlags.length === 0) return router.push("/");
+		setFlags(selectedFlags);
+	}, []);
 
 	if (gameOver && flags) {
 		return (
