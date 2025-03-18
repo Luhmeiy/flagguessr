@@ -1,11 +1,5 @@
-import { Settings } from "@/interfaces/Settings";
-
-interface ButtonContainerInterface {
-	array: string[];
-	type: string;
-	settings: Settings;
-	handleSettings: (option: string, value: string) => void;
-}
+import TypeSettings from "./TypeSettings";
+import { ButtonContainerInterface } from "@/interfaces/SettingComponents";
 
 const ButtonContainer = ({
 	array,
@@ -18,7 +12,7 @@ const ButtonContainer = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex flex-col gap-1">
 			<h3 className="font-bold">{capitalize(type)}</h3>
 
 			<div className="flex gap-1 bg-slate-100 p-1.5 rounded dark:bg-neutral-900">
@@ -36,6 +30,14 @@ const ButtonContainer = ({
 					</button>
 				))}
 			</div>
+
+			{(type === "style" || settings.mode !== "casual") && (
+				<TypeSettings
+					type={type}
+					settings={settings}
+					handleSettings={handleSettings}
+				/>
+			)}
 		</div>
 	);
 };

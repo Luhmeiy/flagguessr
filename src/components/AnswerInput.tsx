@@ -2,6 +2,7 @@
 
 import {
 	Dispatch,
+	FormEvent,
 	JSX,
 	KeyboardEvent,
 	SetStateAction,
@@ -32,6 +33,7 @@ interface AnswerInputInterface {
 	setPosition: Dispatch<SetStateAction<number>>;
 	setGameOver: Dispatch<SetStateAction<boolean>>;
 	handleScore: () => void;
+	handleLives: () => void;
 }
 
 const AnswerInput = ({
@@ -41,6 +43,7 @@ const AnswerInput = ({
 	setPosition,
 	setGameOver,
 	handleScore,
+	handleLives,
 }: AnswerInputInterface) => {
 	const router = useRouter();
 
@@ -49,6 +52,7 @@ const AnswerInput = ({
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isFinished, setIsFinished] = useState(false);
 	const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+	const [skipQuestion, setSkipQuestion] = useState<boolean>();
 
 	const [options, setOptions] = useState([""]);
 	const [remainingOptions, setRemainingOptions] = useState([
@@ -101,8 +105,33 @@ const AnswerInput = ({
 		const correct = selected.toLowerCase() === answer.toLowerCase();
 		setIsCorrect(correct);
 
-		if (correct) handleScore();
+		if (correct) {
+			handleScore();
+		} else {
+			if (settings?.mode === "survival") {
+				handleLives();
+			}
+
+			if (!skipQuestion && !isCorrect) {
+				setIsSubmitted(false);
+			}
+		}
+
 		if (remainingOptions.length <= 1) setIsFinished(true);
+	};
+
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if (isFinished) {
+			setGameOver(true);
+		} else {
+			if (isSubmitted) {
+				buildQuestion();
+			} else {
+				verifyAnswer();
+			}
+		}
 	};
 
 	const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -191,7 +220,6 @@ const AnswerInput = ({
 									? "bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600"
 									: "bg-slate-200 hover:bg-slate-300 dark:bg-neutral-800 dark:hover:bg-neutral-700"
 							}`}
-						disabled={isSubmitted}
 					>
 						{option}
 					</button>
@@ -249,6 +277,11 @@ const AnswerInput = ({
 		if (!savedSettings) router.push("/");
 		setSettings(savedSettings);
 
+		setSkipQuestion(
+			savedSettings?.mode === "survival" &&
+				savedSettings?.survival.skipOnLoss
+		);
+
 		buildQuestion();
 	}, []);
 
@@ -260,26 +293,26 @@ const AnswerInput = ({
 
 	return (
 		<form
-			onSubmit={(e) => {
-				e.preventDefault();
-				return isFinished
-					? setGameOver(true)
-					: isSubmitted
-					? buildQuestion()
-					: verifyAnswer();
-			}}
+			onSubmit={handleSubmit}
 			className="w-full max-w-screen-sm flex flex-col gap-4"
 		>
-			{!isSubmitted && settings && modeMap[settings.style]}
-			{isCorrect !== null && (
-				<div
-					className={`text-center text-xl font-bold mb-4 ${
-						isCorrect ? "text-green-600" : "text-red-600"
-					}`}
-				>
-					<p>{isCorrect ? "Correct! 🎉" : "Wrong! 😞"}</p>
-					<p>{`Flag of ${answer}`}</p>
-				</div>
+			{settings && (
+				<>
+					{(!isSubmitted || (!skipQuestion && !isCorrect)) &&
+						modeMap[settings.style]}
+					{isCorrect !== null && (
+						<div
+							className={`text-center text-xl font-bold ${
+								isCorrect ? "text-green-600" : "text-red-600"
+							} ${(skipQuestion || isCorrect) && "mb-3"}`}
+						>
+							<p>{isCorrect ? "Correct! 🎉" : "Wrong! 😞"}</p>
+							{(skipQuestion || isCorrect) && (
+								<p>{`Flag of ${answer}`}</p>
+							)}
+						</div>
+					)}
+				</>
 			)}
 
 			<button

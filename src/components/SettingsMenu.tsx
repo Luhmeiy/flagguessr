@@ -13,6 +13,16 @@ const defaultSettings: Settings = {
 	mode: "casual",
 	style: "multiple",
 	selectedFlags: [],
+	survival: {
+		lives: 3,
+		skipOnLoss: false,
+	},
+	timed: {
+		totalTime: 2050,
+		timePerFlag: 10,
+		isTimePerFlag: false,
+		skipOnLoss: false,
+	},
 };
 
 const gameModes = ["casual", "survival", "timed"];
@@ -29,11 +39,23 @@ const SettingsMenu = () => {
 	const [settings, setSettings] = useState<Settings>(defaultSettings);
 	const [savedSettings, setSavedSettings] = useState<Settings | null>(null);
 
-	const handleSettings = (option: string, value: string | Flag[]) => {
-		setSettings((prev) => ({
-			...prev,
-			[option]: value,
-		}));
+	const handleSettings = (
+		option: string,
+		value: string | Flag[] | object
+	) => {
+		setSettings((prev) => {
+			if (option === "survival" || option === "timed") {
+				return {
+					...prev,
+					[option]: {
+						...prev[option],
+						...(value as object),
+					},
+				};
+			} else {
+				return { ...prev, [option]: value };
+			}
+		});
 	};
 
 	const handleStart = (settings: Settings) => {
