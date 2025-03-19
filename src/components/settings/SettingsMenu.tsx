@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { X } from "@phosphor-icons/react/dist/ssr";
 import ButtonContainer from "./ButtonContainer";
-import FlagSelector from "./FlagSelector";
+import FlagSelector from "../FlagSelector";
 import { Flag } from "@/interfaces/Flag";
 import { GroupedFlags } from "@/interfaces/GroupedFlags";
 import { Settings } from "@/interfaces/Settings";

@@ -1,4 +1,4 @@
-import SettingsMenu from "@/components/SettingsMenu";
+import SettingsMenu from "@/components/settings/SettingsMenu";
 
 export default async function Home() {
 	const response = await fetch(`${process.env.BACKEND_URL}/api/flagCount`);

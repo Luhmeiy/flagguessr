@@ -11,7 +11,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { useRouter } from "next/navigation";
 import { Flag } from "@/interfaces/Flag";
 import { Settings } from "@/interfaces/Settings";
 
@@ -27,27 +26,28 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 interface AnswerInputInterface {
+	settings: Settings;
 	defaultOptions: Flag[];
 	answer: string;
 	setAnswer: Dispatch<SetStateAction<string>>;
 	setPosition: Dispatch<SetStateAction<number>>;
+	setIsTimerActive: Dispatch<SetStateAction<boolean>>;
 	setGameOver: Dispatch<SetStateAction<boolean>>;
 	handleScore: () => void;
 	handleLives: () => void;
 }
 
 const AnswerInput = ({
+	settings,
 	defaultOptions,
 	answer,
 	setAnswer,
 	setPosition,
+	setIsTimerActive,
 	setGameOver,
 	handleScore,
 	handleLives,
 }: AnswerInputInterface) => {
-	const router = useRouter();
-
-	const [settings, setSettings] = useState<Settings | null>(null);
 	const [selected, setSelected] = useState("");
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [isFinished, setIsFinished] = useState(false);
@@ -80,6 +80,8 @@ const AnswerInput = ({
 	};
 
 	const buildQuestion = () => {
+		setIsTimerActive(true);
+
 		const root = !answer
 			? remainingOptions
 			: remainingOptions.filter(
@@ -101,6 +103,7 @@ const AnswerInput = ({
 
 	const verifyAnswer = () => {
 		setIsSubmitted(true);
+		setIsTimerActive(false);
 
 		const correct = selected.toLowerCase() === answer.toLowerCase();
 		setIsCorrect(correct);
@@ -108,12 +111,13 @@ const AnswerInput = ({
 		if (correct) {
 			handleScore();
 		} else {
-			if (settings?.mode === "survival") {
+			if (settings.mode === "survival") {
 				handleLives();
 			}
 
-			if (!skipQuestion && !isCorrect) {
+			if (settings.mode !== "casual" && !skipQuestion && !isCorrect) {
 				setIsSubmitted(false);
+				setIsTimerActive(true);
 			}
 		}
 
@@ -270,16 +274,9 @@ const AnswerInput = ({
 	};
 
 	useEffect(() => {
-		const savedSettings = JSON.parse(
-			localStorage.getItem("flagGuessrSettings")!
-		);
-
-		if (!savedSettings) router.push("/");
-		setSettings(savedSettings);
-
 		setSkipQuestion(
-			savedSettings?.mode === "survival" &&
-				savedSettings?.survival.skipOnLoss
+			(settings.mode === "survival" && settings.survival.skipOnLoss) ||
+				(settings.mode === "timed" && settings.timed.skipOnLoss)
 		);
 
 		buildQuestion();
@@ -298,7 +295,10 @@ const AnswerInput = ({
 		>
 			{settings && (
 				<>
-					{(!isSubmitted || (!skipQuestion && !isCorrect)) &&
+					{(!isSubmitted ||
+						(settings.mode !== "casual" &&
+							!skipQuestion &&
+							!isCorrect)) &&
 						modeMap[settings.style]}
 					{isCorrect !== null && (
 						<div
@@ -307,7 +307,9 @@ const AnswerInput = ({
 							} ${(skipQuestion || isCorrect) && "mb-3"}`}
 						>
 							<p>{isCorrect ? "Correct! 🎉" : "Wrong! 😞"}</p>
-							{(skipQuestion || isCorrect) && (
+							{(skipQuestion ||
+								isCorrect ||
+								settings.mode === "casual") && (
 								<p>{`Flag of ${answer}`}</p>
 							)}
 						</div>

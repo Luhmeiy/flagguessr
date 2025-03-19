@@ -14,12 +14,12 @@ export default function Guess() {
 
 	const [answer, setAnswer] = useState("");
 	const [position, setPosition] = useState(1);
+	const [isTimerActive, setIsTimerActive] = useState(false);
 	const [score, setScore] = useState(0);
 	const [lives, setLives] = useState(0);
 
 	const [settings, setSettings] = useState<Settings>();
 	const [flags, setFlags] = useState<Flag[] | null>(null);
-	const [mode, setMode] = useState<string>();
 	const [gameOver, setGameOver] = useState(false);
 
 	const handleScore = useCallback(() => {
@@ -63,7 +63,6 @@ export default function Guess() {
 		if (settings.selectedFlags.length === 0) return router.push("/");
 		setSettings(settings);
 		setFlags(settings.selectedFlags);
-		setMode(settings.mode);
 		setLives(settings.survival.lives);
 	}, []);
 
@@ -79,29 +78,34 @@ export default function Guess() {
 
 	return (
 		<div className="flex flex-col items-center justify-center flex-1 p-8 pb-20 gap-8">
-			<div className="w-full max-w-screen-sm flex flex-col items-center gap-2">
-				{flags && mode && (
-					<PointsDisplay
-						mode={mode}
-						lives={lives}
-						totalFlags={flags.length}
-						position={position}
-						score={score}
-					/>
-				)}
-				<FlagDisplay answer={answer} />
-			</div>
+			{settings && flags && (
+				<>
+					<div className="w-full max-w-screen-sm flex flex-col items-center gap-2">
+						<PointsDisplay
+							settings={settings}
+							isTimerActive={isTimerActive}
+							lives={lives}
+							totalFlags={flags.length}
+							position={position}
+							score={score}
+							setGameOver={setGameOver}
+						/>
 
-			{flags && (
-				<AnswerInput
-					defaultOptions={flags}
-					answer={answer}
-					setAnswer={setAnswer}
-					setPosition={setPosition}
-					setGameOver={setGameOver}
-					handleScore={handleScore}
-					handleLives={handleLives}
-				/>
+						<FlagDisplay answer={answer} />
+					</div>
+
+					<AnswerInput
+						settings={settings}
+						defaultOptions={flags}
+						answer={answer}
+						setAnswer={setAnswer}
+						setPosition={setPosition}
+						setIsTimerActive={setIsTimerActive}
+						setGameOver={setGameOver}
+						handleScore={handleScore}
+						handleLives={handleLives}
+					/>
+				</>
 			)}
 		</div>
 	);
