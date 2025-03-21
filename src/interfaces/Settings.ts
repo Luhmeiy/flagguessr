@@ -14,4 +14,10 @@ export interface Settings {
 		isTimePerFlag: boolean;
 		skipOnLoss: boolean;
 	};
+	multiple: {
+		options: number;
+	};
+	written: {
+		autoComplete: boolean;
+	};
 }

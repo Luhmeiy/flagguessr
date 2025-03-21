@@ -23,6 +23,12 @@ const defaultSettings: Settings = {
 		isTimePerFlag: false,
 		skipOnLoss: false,
 	},
+	multiple: {
+		options: 4,
+	},
+	written: {
+		autoComplete: true,
+	},
 };
 
 const gameModes = ["casual", "survival", "timed"];

@@ -71,7 +71,10 @@ const AnswerInput = ({
 			.filter(({ name }) => name !== newAnswer)
 			.map(({ name }) => name);
 
-		const randomOptions = shuffleArray(otherOptions).slice(0, 3);
+		const randomOptions = shuffleArray(otherOptions).slice(
+			0,
+			settings.multiple.options - 1
+		);
 
 		return {
 			options: shuffleArray([newAnswer, ...randomOptions]),

@@ -69,6 +69,15 @@ const TypeSettings = ({
 				/>
 			</>
 		),
+		multiple: (
+			<SettingsNumberInput
+				text="Number of options:"
+				option="options"
+				value={settings.multiple.options}
+				handleTypeSettings={handleTypeSettings}
+			/>
+		),
+		written: <></>,
 	};
 
 	return (
