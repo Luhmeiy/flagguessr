@@ -249,7 +249,7 @@ const AnswerInput = ({
 					required
 				/>
 
-				{selected && (
+				{settings.written.autoComplete && selected && (
 					<div
 						ref={optionsRef}
 						className="w-full mt-1 bg-slate-200 dark:bg-neutral-800 rounded shadow-lg"

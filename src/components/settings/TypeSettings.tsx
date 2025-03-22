@@ -77,7 +77,14 @@ const TypeSettings = ({
 				handleTypeSettings={handleTypeSettings}
 			/>
 		),
-		written: <></>,
+		written: (
+			<SettingsCheckbox
+				text="Turn on autocomplete?"
+				option="autoComplete"
+				checked={settings.written.autoComplete}
+				handleTypeSettings={handleTypeSettings}
+			/>
+		),
 	};
 
 	return (
