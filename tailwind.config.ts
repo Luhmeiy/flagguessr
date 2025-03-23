@@ -16,6 +16,9 @@ export default {
 				heading: ["Poppins", "sans-serif"],
 				body: ["Inter", "sans-serif"],
 			},
+			screens: {
+				xs: "420px",
+			},
 		},
 	},
 	darkMode: "class",

@@ -307,7 +307,7 @@ const AnswerInput = ({
 						<div
 							className={`text-center text-xl font-bold ${
 								isCorrect ? "text-green-600" : "text-red-600"
-							} ${(skipQuestion || isCorrect) && "mb-3"}`}
+							} ${(skipQuestion || isCorrect) && "xs:mb-3"}`}
 						>
 							<p>{isCorrect ? "Correct! 🎉" : "Wrong! 😞"}</p>
 							{(skipQuestion ||

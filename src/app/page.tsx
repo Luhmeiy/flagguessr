@@ -6,7 +6,7 @@ export default async function Home() {
 	const roundedDownFlagCount = Math.floor(flagCount / 50) * 50;
 
 	return (
-		<div className="flex flex-col items-center justify-center flex-1 p-8 pb-20 gap-8">
+		<div className="flex flex-col items-center justify-center flex-1 p-8 pb-20 max-sm:gap-5 sm:gap-8">
 			<h1 className="text-4xl font-bold">FlagGuessr</h1>
 
 			<div className="flex flex-col items-center">

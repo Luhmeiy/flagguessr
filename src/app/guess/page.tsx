@@ -77,7 +77,7 @@ export default function Guess() {
 	}
 
 	return (
-		<div className="flex flex-col items-center justify-center flex-1 p-8 pb-20 gap-8">
+		<div className="flex flex-col items-center justify-center flex-1 p-8 max-xs:gap-4 xs:gap-8">
 			{settings && flags && (
 				<>
 					<div className="w-full max-w-screen-sm flex flex-col items-center gap-2">

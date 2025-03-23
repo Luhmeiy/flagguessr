@@ -108,7 +108,7 @@ const SettingsMenu = () => {
 
 	return (
 		<>
-			<div className="flex flex-col gap-2">
+			<div className="flex flex-col max-sm:gap-1 sm:gap-2">
 				<button
 					onClick={() => setIsVisible(true)}
 					className="p-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600"
@@ -131,7 +131,7 @@ const SettingsMenu = () => {
 			</div>
 
 			{isVisible && (
-				<div className="absolute w-full max-w-96 max-h-[35rem] flex flex-col gap-4 bg-slate-200 px-4 py-3 rounded overflow-auto dark:bg-neutral-800">
+				<div className="absolute w-full flex flex-col gap-4 bg-slate-200 px-4 py-3 rounded overflow-auto dark:bg-neutral-800 max-xs:top-0 max-xs:h-full max-xs:justify-center xs:max-w-96 xs:max-h-[35rem]">
 					<div className="flex justify-between items-center">
 						<h2 className="text-xl font-bold">Settings</h2>
 

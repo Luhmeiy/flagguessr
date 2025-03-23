@@ -13,7 +13,7 @@ const GameOver = ({
 	const router = useRouter();
 
 	return (
-		<div className="flex flex-col justify-center items-center flex-1 gap-5">
+		<div className="flex flex-col justify-center items-center flex-1 max-xs:gap-3 xs:gap-5">
 			<div className="text-center">
 				<h1 className="text-4xl font-bold">Game Over</h1>
 				<p>

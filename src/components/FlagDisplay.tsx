@@ -39,7 +39,7 @@ const FlagDisplay = ({ answer }: { answer: string }) => {
 	if (!flag || isLoading) return null;
 
 	return (
-		<div className="w-full h-96 flex bg-slate-200 px-8 py-7 rounded dark:bg-neutral-800">
+		<div className="w-full flex bg-slate-200 rounded dark:bg-neutral-800 max-xs:h-64 max-xs:px-4 max-xs:py-3 xs:h-72 xs:px-8 xs:py-7 sm:h-96">
 			<Image
 				src={flag}
 				width="0"

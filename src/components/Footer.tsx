@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
 	return (
-		<div className="flex flex-col items-center py-6 text-sm">
+		<div className="flex flex-col items-center py-6 text-sm text-center">
 			<p>Made with 💙 in 🇧🇷 for vexillology buffs.</p>
 			<p className="text-xs">
 				by{" "}
