@@ -91,7 +91,7 @@ const TypeSettings = ({
 		<>
 			<button
 				onClick={() => setIsVisible((prev) => !prev)}
-				className="text-neutral-500 text-sm self-start font-semibold transition-colors hover:text-neutral-600 dark:text-neutral-400 dark:hover:text-neutral-300"
+				className="text-neutral-500 text-sm self-start font-semibold hover:text-neutral-600 dark:text-neutral-400 dark:hover:text-neutral-300 cursor-pointer transition-colors duration-300"
 			>
 				{!isVisible ? "Open" : "Close"} {type} settings
 			</button>

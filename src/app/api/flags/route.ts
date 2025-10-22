@@ -12,6 +12,7 @@ export async function GET() {
 					region: 1,
 					subRegion: 1,
 					name: 1,
+					imageUrl: 1,
 				},
 			},
 			{
@@ -26,6 +27,7 @@ export async function GET() {
 							name: "$name",
 							region: "$region",
 							subRegion: "$subRegion",
+							imageUrl: "$imageUrl",
 						},
 					},
 				},

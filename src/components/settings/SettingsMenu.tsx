@@ -2,14 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { X } from "@phosphor-icons/react/dist/ssr";
+import { XIcon } from "@phosphor-icons/react/dist/ssr";
 import ButtonContainer from "./ButtonContainer";
-import FlagSelector from "../FlagSelector";
-import { Flag } from "@/interfaces/Flag";
+import FlagSelector from "./FlagSelector";
 import { GroupedFlags } from "@/interfaces/GroupedFlags";
 import { Settings } from "@/interfaces/Settings";
 
-const defaultSettings: Settings = {
+export const defaultSettings: Settings = {
 	mode: "casual",
 	style: "multiple",
 	selectedFlags: [],
@@ -47,7 +46,10 @@ const SettingsMenu = () => {
 
 	const handleSettings = (
 		option: string,
-		value: string | Flag[] | object
+		value:
+			| string
+			| { _id: string; name: string; imageUrl: string }[]
+			| object
 	) => {
 		setSettings((prev) => {
 			if (option === "survival" || option === "timed") {
@@ -103,7 +105,7 @@ const SettingsMenu = () => {
 			}
 		};
 
-		if (isVisible) fetchData();
+		if (isVisible && !flags) fetchData();
 	}, [isVisible]);
 
 	return (
@@ -111,7 +113,7 @@ const SettingsMenu = () => {
 			<div className="flex flex-col max-sm:gap-1 sm:gap-2">
 				<button
 					onClick={() => setIsVisible(true)}
-					className="p-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600"
+					className="p-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600 cursor-pointer transition-colors duration-300"
 				>
 					Play
 				</button>
@@ -119,7 +121,7 @@ const SettingsMenu = () => {
 				{savedSettings ? (
 					<button
 						onClick={() => handleStart(savedSettings)}
-						className="text-sm font-semibold text-neutral-400 hover:text-neutral-500 transition-colors dark:text-neutral-500 dark:hover:text-neutral-400"
+						className="text-sm font-semibold text-neutral-400 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-neutral-400 cursor-pointer transition-colors duration-300"
 					>
 						Use saved settings
 					</button>
@@ -131,15 +133,15 @@ const SettingsMenu = () => {
 			</div>
 
 			{isVisible && (
-				<div className="absolute w-full flex flex-col gap-4 bg-slate-200 px-4 py-3 rounded overflow-auto dark:bg-neutral-800 max-xs:top-0 max-xs:h-full max-xs:justify-center xs:max-w-96 xs:max-h-[35rem]">
+				<div className="absolute w-xl flex flex-col gap-4 bg-slate-200 p-4 rounded overflow-auto dark:bg-neutral-800 max-xs:top-0 max-xs:h-full max-xs:justify-center xs:max-w-96 xs:max-h-[35rem]">
 					<div className="flex justify-between items-center">
 						<h2 className="text-xl font-bold">Settings</h2>
 
-						<X
+						<XIcon
 							size={20}
 							weight="bold"
 							onClick={() => setIsVisible(false)}
-							className="right-4 top-3 cursor-pointer"
+							className="right-4 top-3 text-zinc-300 hover:text-zinc-950 dark:text-zinc-600 dark:hover:text-zinc-50 cursor-pointer transition-colors duration-300"
 						/>
 					</div>
 
@@ -167,7 +169,7 @@ const SettingsMenu = () => {
 
 					<button
 						onClick={() => handleStart(settings)}
-						className="p-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600"
+						className="self-center px-8 py-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600 cursor-pointer transition-colors duration-300"
 					>
 						Start
 					</button>

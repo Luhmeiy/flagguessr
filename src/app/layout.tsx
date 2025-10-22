@@ -1,9 +1,9 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter, Poppins } from "next/font/google";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import "./globals.css";
 
 const inter = Inter({
 	subsets: ["latin"],
@@ -31,7 +31,7 @@ export default function RootLayout({
 			<body
 				className={`min-h-screen flex flex-col ${inter.variable} ${poppins.variable} antialiased bg-neutral-50 text-neutral-950 transition-colors dark:bg-neutral-950 dark:text-neutral-50`}
 			>
-				<ThemeProvider attribute="class">
+				<ThemeProvider attribute="class" defaultTheme="dark">
 					<Navbar />
 					{children}
 					<Footer />
