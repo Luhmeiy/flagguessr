@@ -110,7 +110,7 @@ const SettingsMenu = () => {
 
 	return (
 		<>
-			<div className="flex flex-col max-sm:gap-1 sm:gap-2">
+			<div className="min-w-32 flex flex-col gap-2">
 				<button
 					onClick={() => setIsVisible(true)}
 					className="p-2 rounded bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600 cursor-pointer transition-colors duration-300"
@@ -118,16 +118,12 @@ const SettingsMenu = () => {
 					Play
 				</button>
 
-				{savedSettings ? (
+				{savedSettings && (
 					<button
 						onClick={() => handleStart(savedSettings)}
 						className="text-sm font-semibold text-neutral-400 hover:text-neutral-500 dark:text-neutral-500 dark:hover:text-neutral-400 cursor-pointer transition-colors duration-300"
 					>
 						Use saved settings
-					</button>
-				) : (
-					<button onClick={() => handleStart(defaultSettings)}>
-						Use default settings
 					</button>
 				)}
 			</div>
