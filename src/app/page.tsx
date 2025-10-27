@@ -1,7 +1,14 @@
+export const dynamic = "force-dynamic";
+
 import SettingsMenu from "@/components/settings/SettingsMenu";
 
 export default async function Home() {
 	const response = await fetch(`${process.env.BACKEND_URL}/api/flagCount`);
+
+	if (!response.ok) {
+		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+
 	const flagCount = (await response.json()) as number;
 	const roundedDownFlagCount = Math.floor(flagCount / 50) * 50;
 

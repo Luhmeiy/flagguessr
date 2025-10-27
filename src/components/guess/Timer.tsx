@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSettings } from "../SettingsProvider";
 
 const Timer = () => {
-	const { settings, position, isTimerActive, setGameOver } = useSettings();
+	const { isTimerActive, position, settings, setGameOver } = useSettings();
 
 	const { isTimePerFlag, timePerFlag, totalTime } = settings.timed;
 	const initialTime = isTimePerFlag ? timePerFlag : totalTime;

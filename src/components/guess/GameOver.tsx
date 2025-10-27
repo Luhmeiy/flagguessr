@@ -5,15 +5,13 @@ import { useSettings } from "../SettingsProvider";
 
 const GameOver = () => {
 	const router = useRouter();
-	const { score, flags, setGameOver } = useSettings();
+	const { score, setGameOver } = useSettings();
 
 	return (
-		<div className="flex flex-col justify-center items-center flex-1 gap-2 max-xs:gap-3 xs:gap-5">
+		<div className="flex flex-col justify-center items-center flex-1 gap-3">
 			<div className="text-center">
 				<h1 className="text-4xl font-bold">Game Over</h1>
-				<p>
-					Your score was: {score}/{flags.length}
-				</p>
+				<p>Your score was: {score}</p>
 			</div>
 
 			<div className="flex gap-2">

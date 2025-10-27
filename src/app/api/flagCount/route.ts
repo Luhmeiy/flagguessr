@@ -5,14 +5,14 @@ export async function GET() {
 	try {
 		await connectDB();
 
-		const flags = await Flag.countDocuments();
+		const flagCount = await Flag.countDocuments();
 
-		return new Response(JSON.stringify(flags), {
+		return new Response(JSON.stringify(flagCount), {
 			headers: { "Content-Type": "application/json" },
 		});
 	} catch (error) {
 		return new Response(
-			JSON.stringify({ error: "Failed to fetch flags" }),
+			JSON.stringify({ error: "Failed to fetch flag count" }),
 			{
 				status: 500,
 				headers: { "Content-Type": "application/json" },
