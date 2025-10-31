@@ -6,15 +6,17 @@ import { GroupedFlags } from "@/interfaces/GroupedFlags";
 const isFlagArray = (x: GroupedFlags | Flag): x is Flag => "name" in x;
 
 const FlagSelector = ({
-	flags,
 	handleSettings,
 }: {
-	flags: GroupedFlags[];
 	handleSettings: (
 		option: string,
 		value: string | { _id: string; name: string; imageUrl: string }[]
 	) => void;
 }) => {
+	const [flags, setFlags] = useState<GroupedFlags[] | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const [selected, setSelected] = useState<
 		{ _id: string; name: string; imageUrl: string }[]
 	>([]);
@@ -139,28 +141,61 @@ const FlagSelector = ({
 			});
 		};
 
-		recursive(flags);
+		recursive(flags!);
 	};
 
 	useEffect(() => {
 		handleSettings("selectedFlags", selected);
 	}, [selected]);
 
+	useEffect(() => {
+		const fetchFlags = async () => {
+			setIsLoading(true);
+			setError(null);
+
+			try {
+				const response = await fetch("/api/flags", {
+					next: { revalidate: 3600 },
+				});
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+
+				const data = await response.json();
+
+				setFlags(data);
+			} catch (error) {
+				setError(
+					error instanceof Error
+						? error.message
+						: "Failed to load flags"
+				);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		if (!flags) fetchFlags();
+	}, []);
+
 	return (
 		<div className="flex flex-col gap-2">
-			<h3 className="font-bold">Flags</h3>
+			{error && <div className="text-red-500">{error}</div>}
 
 			<div className="flex flex-col gap-1 py-1.5 bg-slate-100 rounded dark:bg-neutral-900">
-				{flags.map(({ title, collection }) => (
-					<Group
-						key={title}
-						title={title}
-						collection={collection}
-						selected={selected}
-						selectedGroups={selectedGroups}
-						handleToggle={handleToggle}
-					/>
-				))}
+				{!isLoading &&
+					flags &&
+					flags.map(({ title, collection }) => (
+						<Group
+							key={title}
+							title={title}
+							collection={collection}
+							selected={selected}
+							selectedGroups={selectedGroups}
+							handleToggle={handleToggle}
+						/>
+					))}
 			</div>
 		</div>
 	);

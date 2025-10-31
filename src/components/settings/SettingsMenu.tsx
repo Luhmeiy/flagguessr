@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { XIcon } from "@phosphor-icons/react/dist/ssr";
 import ButtonContainer from "./ButtonContainer";
-import FlagSelector from "./FlagSelector";
-import { GroupedFlags } from "@/interfaces/GroupedFlags";
+import FlagSelectionContainer from "./FlagSelectionContainer";
 import { Settings } from "@/interfaces/Settings";
 
 export const defaultSettings: Settings = {
@@ -35,10 +34,6 @@ const styles = ["multiple", "written"];
 
 const SettingsMenu = () => {
 	const router = useRouter();
-
-	const [flags, setFlags] = useState<GroupedFlags[] | null>(null);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
 	const [isVisible, setIsVisible] = useState(false);
 	const [settings, setSettings] = useState<Settings>(defaultSettings);
@@ -78,35 +73,6 @@ const SettingsMenu = () => {
 
 		if (savedSettings) setSavedSettings(savedSettings);
 	}, []);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			setIsLoading(true);
-			setError(null);
-
-			try {
-				const response = await fetch("/api/flags");
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-
-				const data = await response.json();
-
-				setFlags(data);
-			} catch (error) {
-				setError(
-					error instanceof Error
-						? error.message
-						: "Failed to load flag"
-				);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
-		if (isVisible && !flags) fetchData();
-	}, [isVisible]);
 
 	return (
 		<>
@@ -155,13 +121,7 @@ const SettingsMenu = () => {
 						handleSettings={handleSettings}
 					/>
 
-					{error && <div className="text-red-500">{error}</div>}
-					{!isLoading && flags && (
-						<FlagSelector
-							flags={flags}
-							handleSettings={handleSettings}
-						/>
-					)}
+					<FlagSelectionContainer handleSettings={handleSettings} />
 
 					<button
 						onClick={() => handleStart(settings)}
