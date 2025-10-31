@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { TriangleIcon } from "@phosphor-icons/react/dist/ssr";
 import { Flag } from "@/interfaces/Flag";
 import { GroupedFlags } from "@/interfaces/GroupedFlags";
+import { HandleSettings } from "@/interfaces/HandleSettings";
 
 const isFlagArray = (x: GroupedFlags | Flag): x is Flag => "name" in x;
 
 const FlagSelector = ({
 	handleSettings,
 }: {
-	handleSettings: (
-		option: string,
-		value: string | { _id: string; name: string; imageUrl: string }[]
-	) => void;
+	handleSettings: HandleSettings;
 }) => {
 	const [flags, setFlags] = useState<GroupedFlags[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -145,7 +143,7 @@ const FlagSelector = ({
 	};
 
 	useEffect(() => {
-		handleSettings("selectedFlags", selected);
+		handleSettings({ option: "selectedFlags", value: selected });
 	}, [selected]);
 
 	useEffect(() => {

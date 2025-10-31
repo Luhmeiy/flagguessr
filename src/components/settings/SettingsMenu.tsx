@@ -5,12 +5,16 @@ import { useEffect, useState } from "react";
 import { XIcon } from "@phosphor-icons/react/dist/ssr";
 import ButtonContainer from "./ButtonContainer";
 import FlagSelectionContainer from "./FlagSelectionContainer";
+import { HandleSettingsArgs } from "@/interfaces/HandleSettings";
 import { Settings } from "@/interfaces/Settings";
 
 export const defaultSettings: Settings = {
 	mode: "casual",
 	style: "multiple",
 	selectedFlags: [],
+	// @ts-ignore
+	selectedPreset: {},
+	isPreset: true,
 	survival: {
 		lives: 3,
 		skipOnLoss: false,
@@ -39,13 +43,7 @@ const SettingsMenu = () => {
 	const [settings, setSettings] = useState<Settings>(defaultSettings);
 	const [savedSettings, setSavedSettings] = useState<Settings | null>(null);
 
-	const handleSettings = (
-		option: string,
-		value:
-			| string
-			| { _id: string; name: string; imageUrl: string }[]
-			| object
-	) => {
+	const handleSettings = ({ option, value }: HandleSettingsArgs) => {
 		setSettings((prev) => {
 			if (option === "survival" || option === "timed") {
 				return {

@@ -15,7 +15,9 @@ const ButtonContainer = ({
 			{array.map((item) => (
 				<button
 					key={item}
-					onClick={() => handleSettings(type, item)}
+					onClick={() =>
+						handleSettings({ option: type, value: item })
+					}
 					className={`flex-1 py-1 rounded-sm hover:bg-slate-400 dark:hover:bg-neutral-600 cursor-pointer transition-colors duration-300 ${
 						(settings.mode === item || settings.style === item) &&
 						"bg-slate-300 dark:bg-neutral-700"

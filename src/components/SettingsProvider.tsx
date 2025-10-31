@@ -179,15 +179,39 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 	}, [gameOver]);
 
 	useEffect(() => {
+		const fetchFlags = async (ids: string[]) => {
+			const response = await fetch("/api/flagsById", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ ids }),
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const flags = (await response.json()) as Flag[];
+
+			setFlags(flags);
+			setRemainingOptions(flags);
+		};
+
 		const settings = JSON.parse(
 			localStorage.getItem("flagGuessrSettings")!
 		) as Settings;
 
-		if (settings.selectedFlags.length === 0) return router.push("/");
+		if (!settings.isPreset && settings.selectedFlags.length === 0) {
+			return router.push("/");
+		}
+
+		if (settings.isPreset) {
+			fetchFlags(settings.selectedPreset.flags);
+		} else {
+			setFlags(settings.selectedFlags);
+			setRemainingOptions(settings.selectedFlags);
+		}
 
 		setSettings(settings);
-		setFlags(settings.selectedFlags);
-		setRemainingOptions(settings.selectedFlags);
 		setLives(settings.survival.lives);
 		setSkipQuestion(
 			(settings.mode === "survival" && settings.survival.skipOnLoss) ||

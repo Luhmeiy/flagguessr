@@ -1,9 +1,10 @@
+import { HandleSettings } from "./HandleSettings";
 import { Settings } from "./Settings";
 
 export interface TypeSettingsInterface {
 	type: "mode" | "style";
 	settings: Settings;
-	handleSettings: (option: string, value: string | object) => void;
+	handleSettings: HandleSettings;
 }
 
 export interface ButtonContainerInterface extends TypeSettingsInterface {

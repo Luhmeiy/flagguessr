@@ -13,8 +13,11 @@ const TypeSettings = ({
 	const typeString = type === "mode" ? settings.mode : settings.style;
 
 	const handleTypeSettings = (option: string, value: number | boolean) => {
-		handleSettings(typeString, {
-			[option]: value,
+		handleSettings({
+			option: typeString,
+			value: {
+				[option]: value,
+			},
 		});
 	};
 

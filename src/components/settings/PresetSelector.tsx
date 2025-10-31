@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import { HandleSettings } from "@/interfaces/HandleSettings";
 import { Preset } from "@/interfaces/Preset";
 
-const PresetSelector = () => {
+const PresetSelector = ({
+	handleSettings,
+}: {
+	handleSettings: HandleSettings;
+}) => {
 	const [presets, setPresets] = useState<Preset[] | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const [selected, setSelected] = useState<string>();
+	const [selected, setSelected] = useState<Preset>();
 
 	useEffect(() => {
 		const fetchPresets = async () => {
@@ -24,7 +29,8 @@ const PresetSelector = () => {
 
 				const data = await response.json();
 
-				setSelected(data[0]._id);
+				setSelected(data[0]);
+				handleSettings({ option: "selectedPreset", value: data[0] });
 				setPresets(data);
 			} catch (error) {
 				setError(
@@ -40,6 +46,12 @@ const PresetSelector = () => {
 		if (!presets) fetchPresets();
 	}, []);
 
+	useEffect(() => {
+		if (selected) {
+			handleSettings({ option: "selectedPreset", value: selected });
+		}
+	}, [selected]);
+
 	return (
 		<div className="flex flex-col gap-2">
 			{error && <div className="text-red-500">{error}</div>}
@@ -50,9 +62,9 @@ const PresetSelector = () => {
 					presets.map((preset) => (
 						<button
 							key={preset._id}
-							onClick={() => setSelected(preset._id)}
+							onClick={() => setSelected(preset)}
 							className={`flex-1 px-2 py-1 rounded-sm hover:bg-slate-400 dark:hover:bg-neutral-600 cursor-pointer transition-colors duration-300 ${
-								selected === preset._id &&
+								selected?._id === preset._id &&
 								"bg-slate-300 dark:bg-neutral-700"
 							}`}
 						>
