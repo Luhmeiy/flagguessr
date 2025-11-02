@@ -5,7 +5,14 @@ export async function GET() {
 	try {
 		await connectDB();
 
-		const presets = await Preset.find();
+		const presets = await Preset.aggregate([
+			{
+				$group: {
+					_id: "$type",
+					presets: { $push: "$$ROOT" },
+				},
+			},
+		]);
 
 		return new Response(JSON.stringify(presets), {
 			headers: { "Content-Type": "application/json" },

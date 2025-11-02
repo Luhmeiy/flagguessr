@@ -93,7 +93,7 @@ const SettingsMenu = () => {
 			</div>
 
 			{isVisible && (
-				<div className="absolute w-xl max-sm:w-auto max-sm:inset-x-0 flex flex-col gap-4 bg-slate-200 mx-4 p-4 rounded overflow-auto dark:bg-neutral-800 max-xs:top-0 max-xs:h-full max-xs:justify-center xs:max-w-96 xs:max-h-[35rem]">
+				<div className="absolute max-h-[42.5rem] w-xl max-sm:w-auto max-sm:inset-x-0 flex flex-col gap-4 bg-slate-200 mx-4 p-4 rounded overflow-y-auto dark:bg-neutral-800 max-xs:top-0 max-xs:h-full max-xs:justify-center xs:max-w-96 xs:max-h-[35rem]">
 					<div className="flex justify-between items-center">
 						<h2 className="text-xl font-bold">Settings</h2>
 

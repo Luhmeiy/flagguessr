@@ -168,6 +168,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 		if (gameOver) setAnswer(null);
 
 		if (!gameOver) {
+			setIsFinished(false);
 			setPosition(1);
 			setScore(0);
 			setLives(settings.survival.lives);

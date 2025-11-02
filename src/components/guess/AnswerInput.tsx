@@ -55,7 +55,7 @@ const AnswerInput = () => {
 			<button
 				ref={submitButtonRef}
 				type="submit"
-				className={`px-6 py-2 self-center min-w-[100px] font-medium text-neutral-50 outline-none rounded
+				className={`px-6 py-2 self-center min-w-[100px] font-medium text-neutral-50 outline-none rounded cursor-pointer
 					${
 						isSubmitted && !isFinished
 							? isCorrect

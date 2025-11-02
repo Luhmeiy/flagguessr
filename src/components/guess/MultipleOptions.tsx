@@ -28,7 +28,7 @@ const MultipleOptions = ({
 					onClick={() => setSelected(option._id)}
 					onFocus={() => setSelected(option._id)}
 					autoFocus={index === 0 && !isSubmitted}
-					className={`p-2 rounded outline-none
+					className={`p-2 rounded outline-none cursor-pointer
 							${
 								selected === option._id
 									? "bg-blue-600 hover:bg-blue-700 text-neutral-50 dark:bg-blue-700 dark:hover:bg-blue-600"
